@@ -10,7 +10,15 @@ namespace Recoil
 {
     class Player : SpriteClass
     {
+        public Texture2D headUp { get; set; }
+        public Texture2D headDown { get; set; }
+        public Texture2D headRight { get; set; }
+        public Texture2D headLeft { get; set; }
+
         public SpriteClass Gun { get; set; }
+        public SpriteClass Arms { get; set; }
+        public SpriteClass Head { get; set; }
+
         public int Ammo { get; set; }
         public int MaxAmmo { get; set; }
         public float shootForce { get; set; }
@@ -28,6 +36,14 @@ namespace Recoil
 
             Gun = new SpriteClass(gDevice, Content, "gun_placeholder", 1f);
             Gun.origin = new Vector2(0, Gun.texture.Height / 2);
+
+            headUp = Content.Load<Texture2D>("head_up");
+            headDown = Content.Load<Texture2D>("head_down");
+            headRight = Content.Load<Texture2D>("head_right");
+            headLeft = Content.Load<Texture2D>("head_left");
+            Head = new SpriteClass(gDevice, headRight, 1f);
+
+            Arms = new SpriteClass(gDevice, Content, "arms", 1f);
 
             x = 1000;
             y = 0;
@@ -113,6 +129,9 @@ namespace Recoil
             Gun.x = x;
             Gun.y = y;
 
+            Head.x = x;
+            Head.y = y - texture.Height / 2;
+
             Gun.Update(elapsedTime);
 
             uiManager.UpdateAmmoCount(Ammo);
@@ -122,6 +141,7 @@ namespace Recoil
         {
             base.Draw(spriteBatch);
             Gun.Draw(spriteBatch);
+            Head.Draw(spriteBatch);
         }
     }
 }
