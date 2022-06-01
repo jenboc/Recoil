@@ -67,7 +67,7 @@ namespace Recoil
             uiManager = new UIManager(GraphicsDevice, Content);
             uiManager.ShowMenu(false);
 
-            ammoSpawner = new AmmoSpawner(Content, "ammo_placeholder", collectableHeightRatio * screenHeight, screenWidth);
+            ammoSpawner = new AmmoSpawner(Content, "ammo_crate", collectableHeightRatio * screenHeight, screenWidth);
         }
 
         protected override void Update(GameTime gameTime)
