@@ -29,7 +29,7 @@ namespace Recoil
         public float gunshotDelay { get; set; }
         public bool canMove { get; set; }
 
-        public Player(GraphicsDevice gDevice, ContentManager Content, string textureName, float scale, float gravityVal, float sHeight, float sWidth) : base(gDevice, Content, textureName, scale)
+        public Player(GraphicsDevice gDevice, ContentManager Content, float scale, float gravityVal, float sHeight, float sWidth) : base(gDevice, Content, "body", scale)
         {
             MaxAmmo = 10;
             Ammo = MaxAmmo;
@@ -44,6 +44,7 @@ namespace Recoil
             Head = new SpriteClass(gDevice, headRight, 1f);
 
             Arms = new SpriteClass(gDevice, Content, "arms", 1f);
+            Arms.origin = Vector2.Zero;
 
             x = 1000;
             y = 0;
@@ -125,12 +126,15 @@ namespace Recoil
                 x = texture.Width / 2;
             }
 
-            //Update Gun
+            //Update Body Parts
             Gun.x = x;
             Gun.y = y;
 
             Head.x = x;
-            Head.y = y - texture.Height / 2;
+            Head.y = (y - texture.Height / 2) - Head.texture.Height/2;
+
+            Arms.x = x;
+            Arms.y = y - texture.Height / 2;
 
             Gun.Update(elapsedTime);
 
@@ -142,6 +146,7 @@ namespace Recoil
             base.Draw(spriteBatch);
             Gun.Draw(spriteBatch);
             Head.Draw(spriteBatch);
+            Arms.Draw(spriteBatch);
         }
     }
 }

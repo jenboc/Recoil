@@ -62,7 +62,7 @@ namespace Recoil
             surfaceTexture = new Texture2D(GraphicsDevice, 1, 1);
             surfaceTexture.SetData(new Color[] { new Color(99, 99, 99) });
 
-            player = new Player(GraphicsDevice, Content, "body", 1f, gravityValue, screenHeight, screenWidth);
+            player = new Player(GraphicsDevice, Content, 1f, gravityValue, screenHeight, screenWidth);
 
             uiManager = new UIManager(GraphicsDevice, Content);
             uiManager.ShowMenu(false);
