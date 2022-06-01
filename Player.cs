@@ -134,7 +134,7 @@ namespace Recoil
             Head.y = (y - texture.Height / 2) - Head.texture.Height/2;
 
             Arms.x = x;
-            Arms.y = y - texture.Height / 2;
+            Arms.y = (y - texture.Height / 2) + 5;
 
             Gun.Update(elapsedTime);
 
