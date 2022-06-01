@@ -70,7 +70,10 @@ namespace Recoil
             for (int i = 0; i < Collectables.Count; i++)
             {
                 Collectable c = Collectables[i];
-                if (player.RectangleCollision(c.sprite)) CollectableEffect(player, i);
+                if (player.RectangleCollision(c.sprite)
+                    || player.Arms.RectangleCollision(c.sprite)
+                    || player.Head.RectangleCollision(c.sprite)
+                    || player.Gun.RectangleCollision(c.sprite)) CollectableEffect(player, i);
             }
         }
 

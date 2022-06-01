@@ -15,6 +15,9 @@ namespace Recoil
         public Texture2D headRight { get; set; }
         public Texture2D headLeft { get; set; }
 
+        public Texture2D armsRight { get; set; }
+        public Texture2D armsLeft { get; set; }
+
         public SpriteClass Gun { get; set; }
         public SpriteClass Arms { get; set; }
         public SpriteClass Head { get; set; }
@@ -34,7 +37,8 @@ namespace Recoil
             MaxAmmo = 10;
             Ammo = MaxAmmo;
 
-            Gun = new SpriteClass(gDevice, Content, "gun_placeholder", 1f);
+            Gun = new SpriteClass(gDevice, Content, "gun", 1f);
+            Gun.scale = new Vector2(2f, 2f);
             Gun.origin = new Vector2(0, Gun.texture.Height / 2);
 
             headUp = Content.Load<Texture2D>("head_up");
@@ -43,7 +47,9 @@ namespace Recoil
             headLeft = Content.Load<Texture2D>("head_left");
             Head = new SpriteClass(gDevice, headRight, 1f);
 
-            Arms = new SpriteClass(gDevice, Content, "arms", 1f);
+            armsRight = Content.Load<Texture2D>("arms_right");
+            armsLeft = Content.Load<Texture2D>("arms_left");
+            Arms = new SpriteClass(gDevice, armsRight, 1f);
             Arms.origin = Vector2.Zero;
 
             x = 1000;
@@ -96,7 +102,25 @@ namespace Recoil
 
             if (mouseState.X < x) theta += MathF.PI;
 
+            Arms.angle = theta;
             Gun.angle = theta;
+
+            //Change Head
+            float leftBoundary = Head.x - Head.texture.Width;
+            float rightBoundary = Head.x + Head.texture.Width;
+            if (mouseState.X >= leftBoundary && mouseState.X <= rightBoundary)
+            {
+                if (mouseState.Y >= Head.y) Head.texture = headDown;
+                else Head.texture = headUp;
+            }
+            else if (mouseState.X < leftBoundary)
+            {
+                Head.texture = headLeft;
+            }
+            else if (mouseState.X > rightBoundary)
+            {
+                Head.texture = headRight;
+            }
     
             //Get Shoot
             if (mouseState.LeftButton == ButtonState.Pressed)
@@ -112,7 +136,9 @@ namespace Recoil
             cooldownTime += elapsedTime;
             //Change according to gravity + shooting
             HandleKeyInput();
+
             dY += gravityValue;
+
             base.Update(elapsedTime);
 
             //Offscreen Left
@@ -127,14 +153,14 @@ namespace Recoil
             }
 
             //Update Body Parts
-            Gun.x = x;
-            Gun.y = y;
-
             Head.x = x;
             Head.y = (y - texture.Height / 2) - Head.texture.Height/2;
 
             Arms.x = x;
             Arms.y = (y - texture.Height / 2) + 5;
+
+            Gun.x = Arms.x;
+            Gun.y = Arms.y;
 
             Gun.Update(elapsedTime);
 
@@ -144,9 +170,9 @@ namespace Recoil
         public new void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            Gun.Draw(spriteBatch);
             Head.Draw(spriteBatch);
             Arms.Draw(spriteBatch);
+            Gun.Draw(spriteBatch);
         }
     }
 }
