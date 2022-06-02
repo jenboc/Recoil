@@ -104,6 +104,38 @@ namespace Recoil
         }
     }
 
+    class CoinSpawner : CollectableSpawner
+    {
+        public CoinSpawner(ContentManager Content, string textureName, float yBoundary, float xBoundary) : base(Content, textureName, yBoundary, xBoundary)
+        {
+            minValue = 50;
+            maxValue = 100;
+
+            maxSpawn = 5;
+        }
+
+        public void CheckCollisions(Player player, UIManager uiManager)
+        {
+            for (int i = 0; i < Collectables.Count; i++)
+            {
+                Collectable c = Collectables[i];
+                if (player.RectangleCollision(c.sprite)
+                    || player.Arms.RectangleCollision(c.sprite)
+                    || player.Head.RectangleCollision(c.sprite)
+                    || player.Gun.RectangleCollision(c.sprite))
+                {
+                    uiManager.AddScore(c.value);
+                    Collectables.RemoveAt(i);
+                }
+            }
+        }
+
+        public override void CollectableEffect(Player player, int cIndex)
+        {
+            throw new NotImplementedException();    
+        }
+    }
+
     class AntiGravSpawner : CollectableSpawner
     {
         float duration = 10;

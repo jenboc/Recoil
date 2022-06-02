@@ -29,6 +29,7 @@ namespace Recoil
         UIManager uiManager;
 
         AmmoSpawner ammoSpawner;
+        CoinSpawner coinSpawner;
         AntiGravSpawner antiGravSpawner;
 
         Random r;
@@ -69,9 +70,11 @@ namespace Recoil
             uiManager = new UIManager(GraphicsDevice, Content);
             uiManager.ShowMenu(false);
 
-            ammoSpawner = new AmmoSpawner(Content, "ammo_crate", collectableHeightRatio * screenHeight, screenWidth);
-            antiGravSpawner = new AntiGravSpawner(Content, "placeholder", collectableHeightRatio * screenHeight, screenWidth);
-            antiGravSpawner.Spawn(GraphicsDevice, 1);
+            float spawnYBoundary = collectableHeightRatio * screenHeight;
+            ammoSpawner = new AmmoSpawner(Content, "ammo_crate", spawnYBoundary, screenWidth);
+            coinSpawner = new CoinSpawner(Content, "placeholder", spawnYBoundary, screenWidth);
+            coinSpawner.Spawn(GraphicsDevice, 2);
+            antiGravSpawner = new AntiGravSpawner(Content, "placeholder", spawnYBoundary, screenWidth);
         }
 
         void SpawnCollectables()
@@ -106,6 +109,7 @@ namespace Recoil
 
                 //Check Object Collisions
                 ammoSpawner.CheckCollisions(player);
+                coinSpawner.CheckCollisions(player, uiManager);
                 antiGravSpawner.CheckCollisions(player);
 
                 //Check if Player dead
@@ -116,6 +120,7 @@ namespace Recoil
                     player.canMove = false;
                     uiManager.ShowMenu(true);
                     ammoSpawner.DestroyAll();
+                    coinSpawner.DestroyAll();
                     antiGravSpawner.DestroyAll();
                 }
 
@@ -154,6 +159,7 @@ namespace Recoil
                 player.Draw(_spriteBatch);
                 uiManager.Draw(_spriteBatch, screenHeight, screenWidth);
                 ammoSpawner.Draw(_spriteBatch);
+                coinSpawner.Draw(_spriteBatch);
                 antiGravSpawner.Draw(_spriteBatch);
             }
             else uiManager.Draw(_spriteBatch, screenHeight, screenWidth); 

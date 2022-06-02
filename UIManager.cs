@@ -20,7 +20,7 @@ namespace Recoil
         bool AmmoVisible;
 
         int AmmoCount = 0;
-        int time;
+        float score;
 
         bool gameOver;
 
@@ -32,6 +32,8 @@ namespace Recoil
 
             SplashPixel = new Texture2D(gDevice, 1, 1);
             SplashPixel.SetData(new Color[] { new Color(99, 99, 99) });
+
+            score = 0;
         }
 
         public void ShowMenu(bool playerDied)
@@ -54,7 +56,13 @@ namespace Recoil
 
         public void UpdateTimer(float time)
         {
-            this.time = (int)time;
+            float increment = time / 100;
+            score += increment;
+        }
+
+        public void AddScore(int amount)
+        {
+            score += amount;
         }
 
         public void Draw(SpriteBatch spriteBatch, float sHeight, float sWidth)
@@ -64,7 +72,7 @@ namespace Recoil
                 string ammoString = AmmoCount.ToString();
                 Vector2 ammoSize = AmmoFont.MeasureString(ammoString);
 
-                string timeString = "Score: " + time.ToString();
+                string timeString = "Score: " + ((int)score).ToString();
                 Vector2 timeSize = TimeFont.MeasureString(timeString);
 
                 spriteBatch.DrawString(AmmoFont, ammoString, new Vector2((sWidth / 2) - (ammoSize.X/2), (sHeight / 2) - ammoSize.Y), Color.White);
@@ -84,7 +92,7 @@ namespace Recoil
                     string diedString = "You Died";
                     Vector2 diedSize = MenuFont.MeasureString(diedString);
 
-                    string scoreString = "Score: " + time.ToString();
+                    string scoreString = "Score: " + ((int)score).ToString();
                     Vector2 scoreSize = MenuFont.MeasureString(scoreString);
 
                     string instString = "Press ENTER to Try Again";
