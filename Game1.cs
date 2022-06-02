@@ -74,6 +74,16 @@ namespace Recoil
             antiGravSpawner.Spawn(GraphicsDevice, 1);
         }
 
+        void SpawnCollectables()
+        {
+            int spawnAmount = r.Next(1, maxSpawn);
+            ammoSpawner.Spawn(GraphicsDevice, spawnAmount);
+            timeSinceLastSpawn = 0f;
+
+            int antiGravChance = r.Next(1, 5);
+            if (antiGravChance == 4) antiGravSpawner.Spawn(GraphicsDevice, 1);
+        }
+
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -88,9 +98,7 @@ namespace Recoil
 
                 if (timeSinceLastSpawn >= spawnDelay)
                 {
-                    int spawnAmount = r.Next(1, maxSpawn);
-                    ammoSpawner.Spawn(GraphicsDevice, spawnAmount);
-                    timeSinceLastSpawn = 0f;
+                    SpawnCollectables();
                 }
 
                 //Update Entities
@@ -108,6 +116,7 @@ namespace Recoil
                     player.canMove = false;
                     uiManager.ShowMenu(true);
                     ammoSpawner.DestroyAll();
+                    antiGravSpawner.DestroyAll();
                 }
 
                 base.Update(gameTime);
@@ -125,7 +134,8 @@ namespace Recoil
                     player.dY = 0;
                     player.dX = 0;
                     player.Ammo = player.MaxAmmo;
-                    player.canMove = true; 
+                    player.canMove = true;
+                    player.RemoveBuffs();
 
                     gamePlaying = true;
                     timeSinceStart = 0;
@@ -139,14 +149,14 @@ namespace Recoil
 
             _spriteBatch.Begin();
 
-            uiManager.Draw(_spriteBatch, screenHeight, screenWidth);
-
             if (gamePlaying)
             {
                 player.Draw(_spriteBatch);
+                uiManager.Draw(_spriteBatch, screenHeight, screenWidth);
                 ammoSpawner.Draw(_spriteBatch);
                 antiGravSpawner.Draw(_spriteBatch);
             }
+            else uiManager.Draw(_spriteBatch, screenHeight, screenWidth); 
 
             _spriteBatch.End();
 

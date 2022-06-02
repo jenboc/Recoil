@@ -81,6 +81,15 @@ namespace Recoil
             buff.AddEffect(this);
         }
 
+        public void RemoveBuffs()
+        {
+            if (ActiveAntiGravBuff != null)
+            {
+                ActiveAntiGravBuff.RemoveEffect(this);
+                ActiveAntiGravBuff = null;
+            }
+        }
+
         public void AddAmmo(int amount)
         {
             Ammo += amount;
@@ -142,8 +151,6 @@ namespace Recoil
             {
                 Shoot(mouseState.X, mouseState.Y);
             }
-
-            if (mouseState.RightButton == ButtonState.Pressed) ActiveAntiGravBuff.RemoveEffect(this);
         }
 
         public void Update(float elapsedTime, UIManager uiManager)
