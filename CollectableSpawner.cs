@@ -17,6 +17,7 @@ namespace Recoil
     abstract class CollectableSpawner
     { 
         public Texture2D CollectableTexture { get; set; }
+        public float CollectableScale { get; set; }
         public List<Collectable> Collectables { get; set; }
         public float xBoundary { get; set; }
         public float yBoundary { get; set; }
@@ -37,6 +38,8 @@ namespace Recoil
             this.xBoundary = xBoundary;
             this.yBoundary = yBoundary;
             r = new Random();
+
+            CollectableScale = 1f;
         }
 
         public void Spawn(GraphicsDevice gDevice, int amount=1)
@@ -47,7 +50,7 @@ namespace Recoil
             int value = r.Next(minValue, maxValue);
 
             Collectable newCollectable = new Collectable();
-            newCollectable.sprite = new SpriteClass(gDevice, CollectableTexture, 1f);
+            newCollectable.sprite = new SpriteClass(gDevice, CollectableTexture, CollectableScale);
             newCollectable.sprite.x = x;
             newCollectable.sprite.y = y;
             newCollectable.value = value;
@@ -146,6 +149,7 @@ namespace Recoil
             maxValue = 45;
 
             maxSpawn = 1;
+            CollectableScale = 1.5f;
         }
 
         public override void CollectableEffect(Player player, int cIndex)
