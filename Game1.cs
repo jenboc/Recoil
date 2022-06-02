@@ -68,7 +68,7 @@ namespace Recoil
             player = new Player(GraphicsDevice, Content, 1f, gravityValue, screenHeight, screenWidth);
 
             uiManager = new UIManager(GraphicsDevice, Content);
-            uiManager.ShowMenu(false);
+            uiManager.ChangeUIState('m');
 
             float spawnYBoundary = collectableHeightRatio * screenHeight;
             ammoSpawner = new AmmoSpawner(Content, "ammo_crate", spawnYBoundary, screenWidth);
@@ -121,7 +121,7 @@ namespace Recoil
                 {
                     gamePlaying = false;
                     player.canMove = false;
-                    uiManager.ShowMenu(true);
+                    uiManager.ChangeUIState('d');
                     ammoSpawner.DestroyAll();
                     coinSpawner.DestroyAll();
                     antiGravSpawner.DestroyAll();
@@ -135,7 +135,7 @@ namespace Recoil
 
                 if (kState.IsKeyDown(Keys.Enter))
                 {
-                    uiManager.ShowAmmo();
+                    uiManager.ChangeUIState('g');
 
                     player.x = screenWidth / 2 - player.texture.Width / 2;
                     player.y = 0;

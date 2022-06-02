@@ -16,13 +16,19 @@ namespace Recoil
         SpriteFont TimeFont;
         SpriteFont MenuFont;
 
-        bool MenuVisible;
-        bool AmmoVisible;
+        Texture2D Logo;
+        Texture2D CharacterImg;
+
+        SpriteClass Button1;
+        SpriteClass Button2;
+
+        //States: 'm': Main Menu
+        //        'g': Game UI
+        //        'd': Death Screen
+        char state;
 
         int AmmoCount = 0;
         float score;
-
-        bool gameOver;
 
         public UIManager(GraphicsDevice gDevice, ContentManager Content)
         {
@@ -30,23 +36,21 @@ namespace Recoil
             MenuFont = Content.Load<SpriteFont>("menu_font");
             TimeFont = Content.Load<SpriteFont>("time_font");
 
+            Logo = Content.Load<Texture2D>("logo");
+            CharacterImg = Content.Load<Texture2D>("character_img");
+
+            Button1 = new SpriteClass(gDevice, Content, "button", 1f);
+            Button2 = new SpriteClass(gDevice, Content, "button", 1f);
+
             SplashPixel = new Texture2D(gDevice, 1, 1);
-            SplashPixel.SetData(new Color[] { new Color(99, 99, 99) });
+            SplashPixel.SetData(new Color[] { new Color(64, 64, 64) });
 
             score = 0;
         }
 
-        public void ShowMenu(bool playerDied)
+        public void ChangeUIState(char state)
         {
-            gameOver = playerDied;
-            AmmoVisible = false;
-            MenuVisible = true;
-        }
-
-        public void ShowAmmo()
-        {
-            MenuVisible = false;
-            AmmoVisible = true;            
+            this.state = state;
         }
 
         public void UpdateAmmoCount(int ammoCount)
@@ -70,49 +74,75 @@ namespace Recoil
             score = 0;
         }
 
+        public void DrawGameUI(SpriteBatch spriteBatch, float sHeight, float sWidth)
+        {
+            string ammoString = AmmoCount.ToString();
+            Vector2 ammoSize = AmmoFont.MeasureString(ammoString);
+
+            string timeString = "Score: " + ((int)score).ToString();
+            Vector2 timeSize = TimeFont.MeasureString(timeString);
+
+            spriteBatch.DrawString(AmmoFont, ammoString, new Vector2((sWidth / 2) - (ammoSize.X / 2), (sHeight / 2) - ammoSize.Y), Color.White);
+            spriteBatch.DrawString(TimeFont, timeString, new Vector2(0, 0), Color.White);
+        }
+
+        public void DrawDeathScreen(SpriteBatch spriteBatch, float sHeight, float sWidth)
+        {
+            spriteBatch.Draw(SplashPixel, new Rectangle(0, 0, (int)sWidth, (int)sHeight), Color.White);
+
+            string diedString = "You Died";
+            Vector2 diedSize = MenuFont.MeasureString(diedString);
+
+            string scoreString = "Score: " + ((int)score).ToString();
+            Vector2 scoreSize = MenuFont.MeasureString(scoreString);
+
+            string instString = "Press ENTER to Try Again";
+            Vector2 instSize = MenuFont.MeasureString(instString);
+
+            spriteBatch.DrawString(MenuFont, diedString, new Vector2((sWidth / 2) - (diedSize.X / 2), (sHeight / 2) - diedSize.Y), Color.White);
+            spriteBatch.DrawString(MenuFont, scoreString, new Vector2((sWidth / 2) - (scoreSize.X / 2), (sHeight * 2 / 3) - scoreSize.Y), Color.White);
+            spriteBatch.DrawString(MenuFont, instString, new Vector2((sWidth / 2) - (instSize.X / 2), (sHeight * 5 / 6) - instSize.Y), Color.White);
+        }
+
+        public void DrawMainMenu(SpriteBatch spriteBatch, float sHeight, float sWidth)
+        {
+            //Move and Draw Assets
+            Button1.x = sWidth / 2;
+            Button1.y = sHeight / 2;
+
+            Button2.x = sWidth / 2;
+            Button2.y = Button1.y + Button2.texture.Height + 20;
+
+            spriteBatch.Draw(SplashPixel, new Rectangle(0, 0, (int)sWidth, (int)sHeight), Color.White);
+            spriteBatch.Draw(Logo, new Rectangle((int)((sWidth/2) - (Logo.Width / 2)), (int)((Button1.y - Button1.texture.Height) - 375), Logo.Width, Logo.Height), Color.White);
+            spriteBatch.Draw(CharacterImg, new Rectangle((int)(Button1.x-Button1.texture.Width/2)/4, (int)Button1.y - Button1.texture.Height/2, CharacterImg.Width, CharacterImg.Height), Color.White);
+            Button1.Draw(spriteBatch);
+            Button2.Draw(spriteBatch);
+
+            //Draw Text
+            string b1Text = "Play";
+            Vector2 b1TextSize = MenuFont.MeasureString(b1Text);
+            string b2Text = "Exit";
+            Vector2 b2TextSize = MenuFont.MeasureString(b2Text);
+
+            spriteBatch.DrawString(MenuFont, b1Text, new Vector2(Button1.x - b1TextSize.X/2, Button1.y - b1TextSize.Y * 3/7), Color.Black);
+            spriteBatch.DrawString(MenuFont, b2Text, new Vector2(Button2.x - b2TextSize.X/2, Button2.y - b2TextSize.Y * 3/7), Color.Black);
+
+        }
+
         public void Draw(SpriteBatch spriteBatch, float sHeight, float sWidth)
         {
-            if (AmmoVisible)
+            switch (state)
             {
-                string ammoString = AmmoCount.ToString();
-                Vector2 ammoSize = AmmoFont.MeasureString(ammoString);
-
-                string timeString = "Score: " + ((int)score).ToString();
-                Vector2 timeSize = TimeFont.MeasureString(timeString);
-
-                spriteBatch.DrawString(AmmoFont, ammoString, new Vector2((sWidth / 2) - (ammoSize.X/2), (sHeight / 2) - ammoSize.Y), Color.White);
-                spriteBatch.DrawString(TimeFont, timeString, new Vector2(0, 0), Color.White);
-            }
-
-            if (MenuVisible)
-            {
-                spriteBatch.Draw(SplashPixel, new Rectangle(0, 0, (int)sWidth, (int)sHeight), Color.White);
-
-                string nameString = "GAME NAME";
-                Vector2 nameSize = MenuFont.MeasureString(nameString);
-                spriteBatch.DrawString(MenuFont, nameString, new Vector2((sWidth / 2) - (nameSize.X / 2), (sHeight / 3) - nameSize.Y), Color.White);
-
-                if (gameOver)
-                {
-                    string diedString = "You Died";
-                    Vector2 diedSize = MenuFont.MeasureString(diedString);
-
-                    string scoreString = "Score: " + ((int)score).ToString();
-                    Vector2 scoreSize = MenuFont.MeasureString(scoreString);
-
-                    string instString = "Press ENTER to Try Again";
-                    Vector2 instSize = MenuFont.MeasureString(instString);
-
-                    spriteBatch.DrawString(MenuFont, diedString, new Vector2((sWidth / 2) - (diedSize.X / 2), (sHeight / 2) - diedSize.Y), Color.White);
-                    spriteBatch.DrawString(MenuFont, scoreString, new Vector2((sWidth / 2) - (scoreSize.X / 2), (sHeight * 2 / 3) - scoreSize.Y), Color.White);
-                    spriteBatch.DrawString(MenuFont, instString, new Vector2((sWidth / 2) - (instSize.X / 2), (sHeight * 5 / 6) - instSize.Y), Color.White);
-                }
-                else
-                {
-                    string instString = "Press ENTER to Play";
-                    Vector2 instSize = MenuFont.MeasureString(instString);
-                    spriteBatch.DrawString(MenuFont, instString, new Vector2((sWidth / 2) - (instSize.X / 2), (sHeight / 2) - instSize.Y), Color.White);
-                }
+                case 'm':
+                    DrawMainMenu(spriteBatch, sHeight, sWidth);
+                    break;
+                case 'g':
+                    DrawGameUI(spriteBatch, sHeight, sWidth);
+                    break;
+                case 'd':
+                    DrawDeathScreen(spriteBatch, sHeight, sWidth);
+                    break;
             }
         }
     }
