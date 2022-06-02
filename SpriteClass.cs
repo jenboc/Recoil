@@ -55,6 +55,15 @@ namespace Recoil
             spriteBatch.Draw(texture, new Vector2(x, y), null, Color.White, angle, origin, scale, spriteEffects, 0f);
         }
 
+        public bool RectangleCollision(float x, float y)
+        {
+            if (this.x + texture.Width * scale.X * HITBOXSCALE / 2 < x) return false;
+            if (this.y + texture.Height * scale.Y * HITBOXSCALE / 2 < y) return false;
+            if (this.x - texture.Width * scale.X * HITBOXSCALE / 2 > x) return false;
+            if (this.y - texture.Height * scale.Y * HITBOXSCALE / 2 > y) return false;
+            return true;
+        }
+
         public bool RectangleCollision(SpriteClass otherSprite)
         {
             if (x + texture.Width * scale.X * HITBOXSCALE / 2 < otherSprite.x - otherSprite.texture.Width * otherSprite.scale.X / 2) return false;

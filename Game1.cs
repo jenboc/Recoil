@@ -131,9 +131,14 @@ namespace Recoil
             }
             else
             {
-                KeyboardState kState = Keyboard.GetState(); 
+                KeyboardState kState = Keyboard.GetState();
+                MouseState mState = Mouse.GetState();
 
-                if (kState.IsKeyDown(Keys.Enter))
+                bool startButtonPress = uiManager.StartButtonPressed(mState);
+                bool exitButtonPress = uiManager.ExitButtonPressed(mState);
+                bool mainMenuButtonPress = uiManager.MainMenuButtonPressed(mState);
+
+                if (kState.IsKeyDown(Keys.Enter) || startButtonPress)
                 {
                     uiManager.ChangeUIState('g');
 
@@ -143,12 +148,21 @@ namespace Recoil
                     player.dX = 0;
                     player.Ammo = player.MaxAmmo;
                     player.canMove = true;
+                    player.cooldownTime = 0;
                     player.RemoveBuffs();
 
                     uiManager.ResetScore();
 
                     gamePlaying = true;
                     timeSinceStart = 0;
+                }
+                else if (exitButtonPress)
+                {
+                    Exit();
+                }
+                else if (mainMenuButtonPress)
+                {
+                    uiManager.ChangeUIState('m');
                 }
             }
         }

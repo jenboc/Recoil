@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-
+using Microsoft.Xna.Framework.Input;
 
 namespace Recoil
 {
@@ -25,7 +25,7 @@ namespace Recoil
         //States: 'm': Main Menu
         //        'g': Game UI
         //        'd': Death Screen
-        char state;
+        public char state;
 
         int AmmoCount = 0;
         float score;
@@ -46,6 +46,21 @@ namespace Recoil
             SplashPixel.SetData(new Color[] { new Color(64, 64, 64) });
 
             score = 0;
+        }
+
+        public bool StartButtonPressed(MouseState mState)
+        {
+            return Button1.RectangleCollision(mState.X, mState.Y) && mState.LeftButton == ButtonState.Pressed;
+        }
+        
+        public bool ExitButtonPressed(MouseState mState)
+        {
+            return Button2.RectangleCollision(mState.X, mState.Y) && mState.LeftButton == ButtonState.Pressed && state == 'm'; 
+        }
+
+        public bool MainMenuButtonPressed(MouseState mState)
+        {
+            return Button2.RectangleCollision(mState.X, mState.Y) && mState.LeftButton == ButtonState.Pressed && state == 'd';
         }
 
         public void ChangeUIState(char state)
@@ -127,7 +142,6 @@ namespace Recoil
 
             spriteBatch.DrawString(MenuFont, b1Text, new Vector2(Button1.x - b1TextSize.X/2, Button1.y - b1TextSize.Y * 3/7), Color.Black);
             spriteBatch.DrawString(MenuFont, b2Text, new Vector2(Button2.x - b2TextSize.X/2, Button2.y - b2TextSize.Y * 3/7), Color.Black);
-
         }
 
         public void Draw(SpriteBatch spriteBatch, float sHeight, float sWidth)
