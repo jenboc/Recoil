@@ -22,6 +22,8 @@ namespace Recoil
         public float yBoundary { get; set; }
         Random r { get; set; }
         public int maxSpawn { get; set; }
+        public int minValue { get; set; }
+        public int maxValue { get; set; }
 
         public Collectable this[int index]
         {
@@ -42,7 +44,7 @@ namespace Recoil
             if (Collectables.Count > maxSpawn) return;
             float x = r.Next(0,(int)xBoundary);
             float y = r.Next(0, (int)yBoundary);
-            int value = r.Next(1, 5);
+            int value = r.Next(minValue, maxValue);
 
             Collectable newCollectable = new Collectable();
             newCollectable.sprite = new SpriteClass(gDevice, CollectableTexture, 1f);
@@ -85,18 +87,55 @@ namespace Recoil
         public abstract void CollectableEffect(Player player, int cIndex);
     }
 
-    class AmmoSpawner : CollectableSpawner {
-        public int ammoPerCollectable { get; set; }        
+    class AmmoSpawner : CollectableSpawner
+    {
         public AmmoSpawner(ContentManager Content, string textureName, float yBoundary, float xBoundary) : base(Content, textureName, yBoundary, xBoundary)
         {
-            ammoPerCollectable = 1;
             maxSpawn = 5;
+
+            minValue = 1;
+            maxValue = 5;
         }
 
         public override void CollectableEffect(Player player, int cIndex)
         {
             player.AddAmmo(Collectables[cIndex].value);
             Collectables.RemoveAt(cIndex);
+        }
+    }
+
+    class AntiGravSpawner : CollectableSpawner
+    {
+        public bool BuffActive { get; set; }
+        public float TimeActive { get; set; }
+
+        float duration = 10;
+
+        public AntiGravSpawner(ContentManager Content, string textureName, float yBoundary, float xBoundary) : base(Content, textureName, yBoundary, xBoundary)
+        {
+            minValue = 10;
+            maxValue = 45;
+
+            maxSpawn = 1;
+        }
+
+        public void Update(float elapsedTime, Player player)
+        {
+            TimeActive += elapsedTime;
+
+            if (BuffActive && TimeActive >= duration)
+            {
+                player.gravityValue = 50f;
+                BuffActive = false;
+            } 
+        }
+
+        public override void CollectableEffect(Player player, int cIndex)
+        {
+            player.gravityValue = Collectables[cIndex].value;
+            Collectables.RemoveAt(cIndex);
+            BuffActive = true;
+            TimeActive = 0;
         }
     }
 }

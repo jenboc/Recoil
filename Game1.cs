@@ -27,7 +27,9 @@ namespace Recoil
 
         Player player;
         UIManager uiManager;
+
         AmmoSpawner ammoSpawner;
+        AntiGravSpawner antiGravSpawner;
 
         Random r;
 
@@ -68,6 +70,8 @@ namespace Recoil
             uiManager.ShowMenu(false);
 
             ammoSpawner = new AmmoSpawner(Content, "ammo_crate", collectableHeightRatio * screenHeight, screenWidth);
+            antiGravSpawner = new AntiGravSpawner(Content, "placeholder", collectableHeightRatio * screenHeight, screenWidth);
+            antiGravSpawner.Spawn(GraphicsDevice, 1);
         }
 
         protected override void Update(GameTime gameTime)
@@ -91,9 +95,11 @@ namespace Recoil
 
                 //Update Entities
                 player.Update(elapsedTime, uiManager);
+                antiGravSpawner.Update(elapsedTime, player);
 
                 //Check Object Collisions
                 ammoSpawner.CheckCollisions(player);
+                antiGravSpawner.CheckCollisions(player);
 
                 //Check if Player dead
                 //Height limit
@@ -140,6 +146,7 @@ namespace Recoil
             {
                 player.Draw(_spriteBatch);
                 ammoSpawner.Draw(_spriteBatch);
+                antiGravSpawner.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
