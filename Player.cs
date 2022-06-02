@@ -32,6 +32,8 @@ namespace Recoil
         public float gunshotDelay { get; set; }
         public bool canMove { get; set; }
 
+        public AntiGravBuff ActiveAntiGravBuff { get; set; }
+
         public Player(GraphicsDevice gDevice, ContentManager Content, float scale, float gravityVal, float sHeight, float sWidth) : base(gDevice, Content, "body", scale)
         {
             MaxAmmo = 10;
@@ -64,6 +66,19 @@ namespace Recoil
             gunshotDelay = 0.5f;
             cooldownTime = gunshotDelay;
             canMove = false;
+
+            ActiveAntiGravBuff = null;
+        }
+
+        public void AddBuff(Buff buff)
+        {
+            if (buff.GetType() == typeof(AntiGravBuff))
+            {
+                if (ActiveAntiGravBuff != null) ActiveAntiGravBuff.RemoveEffect(this);
+                ActiveAntiGravBuff = (AntiGravBuff)buff;
+            }
+
+            buff.AddEffect(this);
         }
 
         public void AddAmmo(int amount)
@@ -127,6 +142,8 @@ namespace Recoil
             {
                 Shoot(mouseState.X, mouseState.Y);
             }
+
+            if (mouseState.RightButton == ButtonState.Pressed) ActiveAntiGravBuff.RemoveEffect(this);
         }
 
         public void Update(float elapsedTime, UIManager uiManager)
@@ -165,6 +182,13 @@ namespace Recoil
             Gun.Update(elapsedTime);
 
             uiManager.UpdateAmmoCount(Ammo);
+
+            //Update Buffs
+            if (ActiveAntiGravBuff != null)
+            {
+                bool expired = ActiveAntiGravBuff.Update(elapsedTime, this);
+                if (expired) ActiveAntiGravBuff = null;
+            }
         }
 
         public new void Draw(SpriteBatch spriteBatch)

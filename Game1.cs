@@ -95,7 +95,6 @@ namespace Recoil
 
                 //Update Entities
                 player.Update(elapsedTime, uiManager);
-                antiGravSpawner.Update(elapsedTime, player);
 
                 //Check Object Collisions
                 ammoSpawner.CheckCollisions(player);

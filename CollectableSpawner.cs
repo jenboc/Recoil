@@ -106,9 +106,6 @@ namespace Recoil
 
     class AntiGravSpawner : CollectableSpawner
     {
-        public bool BuffActive { get; set; }
-        public float TimeActive { get; set; }
-
         float duration = 10;
 
         public AntiGravSpawner(ContentManager Content, string textureName, float yBoundary, float xBoundary) : base(Content, textureName, yBoundary, xBoundary)
@@ -119,23 +116,12 @@ namespace Recoil
             maxSpawn = 1;
         }
 
-        public void Update(float elapsedTime, Player player)
-        {
-            TimeActive += elapsedTime;
-
-            if (BuffActive && TimeActive >= duration)
-            {
-                player.gravityValue = 50f;
-                BuffActive = false;
-            } 
-        }
-
         public override void CollectableEffect(Player player, int cIndex)
         {
-            player.gravityValue = Collectables[cIndex].value;
+            AntiGravBuff buff = new AntiGravBuff(duration, Collectables[cIndex].value);
+            player.AddBuff(buff);
+
             Collectables.RemoveAt(cIndex);
-            BuffActive = true;
-            TimeActive = 0;
         }
     }
 }
