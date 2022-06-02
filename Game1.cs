@@ -131,7 +131,7 @@ namespace Recoil
             }
             else
             {
-                KeyboardState kState = Keyboard.GetState();
+                KeyboardState kState = Keyboard.GetState(); 
 
                 if (kState.IsKeyDown(Keys.Enter))
                 {
@@ -144,6 +144,8 @@ namespace Recoil
                     player.Ammo = player.MaxAmmo;
                     player.canMove = true;
                     player.RemoveBuffs();
+
+                    uiManager.ResetScore();
 
                     gamePlaying = true;
                     timeSinceStart = 0;

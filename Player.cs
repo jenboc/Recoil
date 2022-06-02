@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Recoil
 {
@@ -32,6 +33,10 @@ namespace Recoil
         public float gunshotDelay { get; set; }
         public bool canMove { get; set; }
 
+        public SoundEffect ShootSound { get; set; }
+        public SoundEffect ReloadSound { get; set; }
+
+
         public AntiGravBuff ActiveAntiGravBuff { get; set; }
 
         public Player(GraphicsDevice gDevice, ContentManager Content, float scale, float gravityVal, float sHeight, float sWidth) : base(gDevice, Content, "body", scale)
@@ -54,7 +59,10 @@ namespace Recoil
             Arms = new SpriteClass(gDevice, armsRight, 1f);
             Arms.origin = Vector2.Zero;
 
-            x = 1000;
+            ShootSound = Content.Load<SoundEffect>("shotgun_shoot");
+            ReloadSound = Content.Load<SoundEffect>("shotgun_reload");
+
+            x = sWidth/2 - texture.Width/2;
             y = 0;
 
             shootForce = 1500;
@@ -109,6 +117,10 @@ namespace Recoil
                 dY = shootVector.Y;
                 Ammo--;
                 cooldownTime = 0;
+
+                SoundEffectInstance instance = ShootSound.CreateInstance();
+                instance.Volume = 0.5f;
+                instance.Play();
             }
 
         }

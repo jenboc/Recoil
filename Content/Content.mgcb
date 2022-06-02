@@ -171,6 +171,18 @@
 /processorParam:TextureFormat=Color
 /build:placeholder.png
 
+#begin shotgun_reload.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:shotgun_reload.wav
+
+#begin shotgun_shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:shotgun_shoot.wav
+
 #begin time_font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

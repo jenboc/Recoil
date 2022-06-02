@@ -65,6 +65,11 @@ namespace Recoil
             score += amount;
         }
 
+        public void ResetScore()
+        {
+            score = 0;
+        }
+
         public void Draw(SpriteBatch spriteBatch, float sHeight, float sWidth)
         {
             if (AmmoVisible)
