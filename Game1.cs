@@ -73,7 +73,6 @@ namespace Recoil
             float spawnYBoundary = collectableHeightRatio * screenHeight;
             ammoSpawner = new AmmoSpawner(Content, "ammo_crate", spawnYBoundary, screenWidth);
             coinSpawner = new CoinSpawner(Content, "placeholder", spawnYBoundary, screenWidth);
-            coinSpawner.Spawn(GraphicsDevice, 2);
             antiGravSpawner = new AntiGravSpawner(Content, "placeholder", spawnYBoundary, screenWidth);
         }
 
@@ -82,6 +81,10 @@ namespace Recoil
             int spawnAmount = r.Next(1, maxSpawn);
             ammoSpawner.Spawn(GraphicsDevice, spawnAmount);
             timeSinceLastSpawn = 0f;
+
+            int coinChance = r.Next(1, 3);
+            int coinSpawnAmount = r.Next(1, coinSpawner.maxSpawn);
+            if (coinChance == 3) coinSpawner.Spawn(GraphicsDevice, coinSpawnAmount);
 
             int antiGravChance = r.Next(1, 5);
             if (antiGravChance == 4) antiGravSpawner.Spawn(GraphicsDevice, 1);
