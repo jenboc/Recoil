@@ -92,9 +92,6 @@ namespace Recoil
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             if (gamePlaying)
             { 
                 float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -138,7 +135,7 @@ namespace Recoil
                 bool exitButtonPress = uiManager.ExitButtonPressed(mState);
                 bool mainMenuButtonPress = uiManager.MainMenuButtonPressed(mState);
 
-                if (kState.IsKeyDown(Keys.Enter) || startButtonPress)
+                if (startButtonPress)
                 {
                     uiManager.ChangeUIState('g');
 
