@@ -12,7 +12,8 @@ namespace Recoil.GameStates
         private static GameStateManager _instance;
         private ContentManager _content;
 
-        private Stack<GameState> _screens = new Stack<GameState>();
+        private Dictionary<string, GameState> _screens = new Dictionary<string, GameState>();
+        private string _activeState;
 
         public static GameStateManager Instance
         {
@@ -26,59 +27,48 @@ namespace Recoil.GameStates
             }
         }
 
-        public void AddScreen(GameState screen)
+        public void AddScreen(string screenName, GameState screen)
         {
-            _screens.Push(screen);
-            _screens.Peek().Initialise();
-
-            if (_content != null)
-            {
-                _screens.Peek().LoadContent(_content);
-            }
+            _screens.Add(screenName, screen);
         }
 
-        public void RemoveScreen()
+        public void RemoveScreen(string screenName)
         {
-            if (_screens.Count > 0)
-            {
-                GameState screen = _screens.Peek();
-                _screens.Pop();
-            }
+            _screens.Remove(screenName);
         }
 
         public void ClearScreens()
         {
-            while (_screens.Count > 0)
-            {
-                _screens.Pop();
-            }
+            _screens.Clear();
         }
 
-        public void ChangeScreen(GameState screen)
+        public void ChangeScreen(string screenName)
         {
-            ClearScreens();
-            AddScreen(screen);
+            if (_screens.ContainsKey(screenName))
+            {
+                _activeState = screenName;
+            }
         }
 
         public void Update(GameTime gameTime)
         {
-            if (_screens.Count > 0)
+            if (_activeState != null)
             {
-                _screens.Peek().Update(gameTime);
+                _screens[_activeState].Update(gameTime);
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (_screens.Count > 0)
+            if (_activeState != null)
             {
-                _screens.Peek().Draw(spriteBatch);
+                _screens[_activeState].Draw(spriteBatch);
             }
         }
 
         public void UnloadContent()
         {
-            foreach (GameState state in _screens)
+            foreach (GameState state in _screens.Values)
             {
                 state.UnloadContent();
             }
