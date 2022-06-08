@@ -47,6 +47,9 @@ namespace Recoil.GameStates
             if (_screens.ContainsKey(screenName))
             {
                 _activeState = screenName;
+
+                var newScreen = _screens[_activeState];
+                if (_activeState == "main_game") ((MainGameState)newScreen).Reset();
             }
         }
 

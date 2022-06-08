@@ -25,6 +25,7 @@ namespace Recoil.GameStates
         {
             this.sWidth = sWidth;
             this.sHeight = sHeight;
+            Graphics = graphicsDevice;
         }
 
         public override void Initialise()
@@ -56,7 +57,7 @@ namespace Recoil.GameStates
 
             if (clicking && PlayButton.RectangleCollision(mState.X, mState.Y))
             {
-                GameStateManager.Instance.RemoveScreen();
+                GameStateManager.Instance.ChangeScreen("main_game");
             }
             else if (clicking && ExitButton.RectangleCollision(mState.X, mState.Y))
             {

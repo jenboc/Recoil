@@ -50,6 +50,7 @@ namespace Recoil.GameStates
         public override void LoadContent(ContentManager Content)
         {
             player = new Player(Graphics, Content, 1f, GravityValue, screenHeight, screenWidth);
+            player.canMove = true;
 
             float spawnYBoundary = CollectableHeightRatio * screenHeight;
             ammoSpawner = new AmmoSpawner(Content, "ammo_crate", spawnYBoundary, screenWidth);
@@ -69,7 +70,8 @@ namespace Recoil.GameStates
         {
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Score += elapsedTime / 100;
-            
+            timeSinceLastSpawn += elapsedTime;
+
             if (timeSinceLastSpawn >= spawnDelay)
             {
                 SpawnCollectables();
@@ -126,6 +128,7 @@ namespace Recoil.GameStates
 
         private void ShowDeathScreen()
         {
+            GameStateManager.Instance.ChangeScreen("death_screen");
         }
 
         private void SpawnCollectables()
@@ -141,6 +144,13 @@ namespace Recoil.GameStates
             if (antiGravChance == 4) antiGravSpawner.Spawn(Graphics, 1);
 
             timeSinceLastSpawn = 0f;
+        }
+
+        public void Reset()
+        {
+            player.x = screenWidth / 2 - player.texture.Width / 2;
+            player.y = 0;
+            player.canMove = true;
         }
     }
 }

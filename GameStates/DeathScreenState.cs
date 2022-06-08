@@ -15,8 +15,6 @@ namespace Recoil.GameStates
 
         private GraphicsDevice Graphics;
         private SpriteFont MenuFont;
-        private Texture2D Logo;
-        private Texture2D CharacterImg;
         private Texture2D SplashPixel;
         private SpriteClass PlayButton;
         private SpriteClass MenuButton;
@@ -25,6 +23,7 @@ namespace Recoil.GameStates
         {
             this.sWidth = sWidth;
             this.sHeight = sHeight;
+            Graphics = graphicsDevice;
         }
 
         public override void Initialise()
@@ -34,9 +33,6 @@ namespace Recoil.GameStates
         public override void LoadContent(ContentManager Content)
         {
             MenuFont = Content.Load<SpriteFont>("menu_font");
-
-            Logo = Content.Load<Texture2D>("logo");
-            CharacterImg = Content.Load<Texture2D>("character_img");
 
             PlayButton = new SpriteClass(Graphics, Content, "button", 1f);
             MenuButton = new SpriteClass(Graphics, Content, "button", 1f);
@@ -56,11 +52,11 @@ namespace Recoil.GameStates
 
             if (clicking && PlayButton.RectangleCollision(mState.X, mState.Y))
             {
-                //Change to Main Game State
+                GameStateManager.Instance.ChangeScreen("main_game");
             }
             else if (clicking && MenuButton.RectangleCollision(mState.X, mState.Y))
             {
-                //Change to Main Menu
+                GameStateManager.Instance.ChangeScreen("main_menu");
             }
         }
 
@@ -80,7 +76,7 @@ namespace Recoil.GameStates
             //Draw Text
             string diedString = "You Died";
             Vector2 diedSize = MenuFont.MeasureString(diedString);
-            string scoreString = "Score: " + ((int)score).ToString();
+            string scoreString = "Score: " + 5.ToString();
             Vector2 scoreSize = MenuFont.MeasureString(scoreString);
 
             string b1Text = "Play";

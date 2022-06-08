@@ -41,7 +41,7 @@ namespace Recoil
             screenHeight = _graphics.PreferredBackBufferHeight;
             screenWidth = _graphics.PreferredBackBufferWidth;
 
-            StateManager = new GameStateManager();
+            StateManager = GameStateManager.Instance;
             MainMenu = new MainMenuState(GraphicsDevice, screenWidth, screenHeight);
             MainGame = new MainGameState(GraphicsDevice, screenWidth, screenHeight);
             DeathScreen = new DeathScreenState(GraphicsDevice, screenWidth, screenHeight);
@@ -49,7 +49,13 @@ namespace Recoil
             MainMenu.Initialise();
             MainGame.Initialise();
             DeathScreen.Initialise();
-            
+
+            StateManager.AddScreen("main_menu", MainMenu);
+            StateManager.AddScreen("main_game", MainGame);
+            StateManager.AddScreen("death_screen", DeathScreen);
+
+            StateManager.ChangeScreen("main_menu");
+
             base.Initialize();
         }
 
