@@ -89,32 +89,7 @@ namespace Recoil
 
         public void DrawDeathScreen(SpriteBatch spriteBatch, float sHeight, float sWidth)
         {
-            //Move and Draw Assets            
-            Button1.x = sWidth / 2 - Button1.texture.Width / 2;
-            Button1.y = sHeight / 2 + Button1.texture.Height;
-
-            Button2.x = sWidth / 2 + Button2.texture.Width / 2;
-            Button2.y = Button1.y;
-
-            spriteBatch.Draw(SplashPixel, new Rectangle(0, 0, (int)sWidth, (int)sHeight), Color.White);
-            Button1.Draw(spriteBatch);
-            Button2.Draw(spriteBatch);
-
-            //Draw Text
-            string diedString = "You Died";
-            Vector2 diedSize = MenuFont.MeasureString(diedString);
-            string scoreString = "Score: " + ((int)score).ToString();
-            Vector2 scoreSize = MenuFont.MeasureString(scoreString);
-
-            string b1Text = "Play";
-            Vector2 b1TextSize = MenuFont.MeasureString(b1Text);
-            string b2Text = "Menu";
-            Vector2 b2TextSize = MenuFont.MeasureString(b2Text);
-
-            spriteBatch.DrawString(MenuFont, diedString, new Vector2(sWidth/2 - diedSize.X/2, sHeight/6), Color.White);
-            spriteBatch.DrawString(MenuFont, scoreString, new Vector2(sWidth/2 - scoreSize.X/2, sHeight/3), Color.White);
-            spriteBatch.DrawString(MenuFont, b1Text, new Vector2(Button1.x - b1TextSize.X / 2, Button1.y - b1TextSize.Y * 3 / 7), Color.Black);
-            spriteBatch.DrawString(MenuFont, b2Text, new Vector2(Button2.x - b2TextSize.X / 2, Button2.y - b2TextSize.Y * 3 / 7), Color.Black);
+            
 
         }
 
