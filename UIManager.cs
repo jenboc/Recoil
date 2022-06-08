@@ -32,25 +32,12 @@ namespace Recoil
 
         public UIManager(GraphicsDevice gDevice, ContentManager Content)
         {
-            AmmoFont = Content.Load<SpriteFont>("ammo_font");
-            MenuFont = Content.Load<SpriteFont>("menu_font");
-            TimeFont = Content.Load<SpriteFont>("time_font");
 
-            Logo = Content.Load<Texture2D>("logo");
-            CharacterImg = Content.Load<Texture2D>("character_img");
-
-            Button1 = new SpriteClass(gDevice, Content, "button", 1f);
-            Button2 = new SpriteClass(gDevice, Content, "button", 1f);
-
-            SplashPixel = new Texture2D(gDevice, 1, 1);
-            SplashPixel.SetData(new Color[] { new Color(64, 64, 64) });
-
-            score = 0;
         }
 
         public bool StartButtonPressed(MouseState mState)
         {
-            return Button1.RectangleCollision(mState.X, mState.Y) && mState.LeftButton == ButtonState.Pressed;
+            return 
         }
         
         public bool ExitButtonPressed(MouseState mState)
@@ -133,27 +120,7 @@ namespace Recoil
 
         public void DrawMainMenu(SpriteBatch spriteBatch, float sHeight, float sWidth)
         {
-            //Move and Draw Assets
-            Button1.x = sWidth / 2;
-            Button1.y = sHeight / 2;
 
-            Button2.x = sWidth / 2;
-            Button2.y = Button1.y + Button2.texture.Height + 20;
-
-            spriteBatch.Draw(SplashPixel, new Rectangle(0, 0, (int)sWidth, (int)sHeight), Color.White);
-            spriteBatch.Draw(Logo, new Rectangle((int)((sWidth/2) - (Logo.Width / 2)), (int)((Button1.y - Button1.texture.Height) - 375), Logo.Width, Logo.Height), Color.White);
-            spriteBatch.Draw(CharacterImg, new Rectangle((int)(Button1.x-Button1.texture.Width/2)/4, (int)Button1.y - Button1.texture.Height/2, CharacterImg.Width, CharacterImg.Height), Color.White);
-            Button1.Draw(spriteBatch);
-            Button2.Draw(spriteBatch);
-
-            //Draw Text
-            string b1Text = "Play";
-            Vector2 b1TextSize = MenuFont.MeasureString(b1Text);
-            string b2Text = "Exit";
-            Vector2 b2TextSize = MenuFont.MeasureString(b2Text);
-
-            spriteBatch.DrawString(MenuFont, b1Text, new Vector2(Button1.x - b1TextSize.X/2, Button1.y - b1TextSize.Y * 3/7), Color.Black);
-            spriteBatch.DrawString(MenuFont, b2Text, new Vector2(Button2.x - b2TextSize.X/2, Button2.y - b2TextSize.Y * 3/7), Color.Black);
         }
 
         public void Draw(SpriteBatch spriteBatch, float sHeight, float sWidth)

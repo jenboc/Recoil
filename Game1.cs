@@ -7,6 +7,8 @@ namespace Recoil
 {
     public class Game1 : Game
     {
+        public static Game1 Instance;
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -39,6 +41,8 @@ namespace Recoil
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            Instance = this;
         }
 
         protected override void Initialize()
