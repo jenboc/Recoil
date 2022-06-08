@@ -165,7 +165,7 @@ namespace Recoil
             }
         }
 
-        public void Update(float elapsedTime, UIManager uiManager)
+        public new void Update(float elapsedTime)
         {
             if (!canMove) return; 
 
@@ -199,8 +199,6 @@ namespace Recoil
             Gun.y = Arms.y;
 
             Gun.Update(elapsedTime);
-
-            uiManager.UpdateAmmoCount(Ammo);
 
             //Update Buffs
             if (ActiveAntiGravBuff != null)

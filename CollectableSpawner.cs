@@ -117,7 +117,7 @@ namespace Recoil
             maxSpawn = 5;
         }
 
-        public void CheckCollisions(Player player, UIManager uiManager)
+        public void CheckCollisions(Player player, ref float Score)
         {
             for (int i = 0; i < Collectables.Count; i++)
             {
@@ -127,7 +127,7 @@ namespace Recoil
                     || player.Head.RectangleCollision(c.sprite)
                     || player.Gun.RectangleCollision(c.sprite))
                 {
-                    uiManager.AddScore(c.value);
+                    Score += Collectables[i].value;
                     Collectables.RemoveAt(i);
                 }
             }
